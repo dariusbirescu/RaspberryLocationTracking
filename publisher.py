@@ -1,16 +1,11 @@
-import requests, datetime,json,urllib2
+import requests, datetime,json,urllib2,math
 
-def publishToFirebase(lat,longit):
+def publishToFirebase(latDestination,longitDestination,lat,longit):
     currentDate=str(datetime.datetime.now())
-    print currentDate
-    
     data = {"date":currentDate, "lat":lat, "longit":longit}
-    req = urllib2.Request("https://locationtracking-b3f3f.firebaseio.com/.json")
+    req = urllib2.Request("https://locationtrackingdd.firebaseio.com/"+str(int(latDestination))+"AND"+str(int(longitDestination))+".json")
     req.add_header('Content-Type', 'application/json')
     
     response = urllib2.urlopen(req, json.dumps(data))
     print response
-    return response
-
-publishToFirebase(3,4)
-                                                                             
+    return response                                                                             
