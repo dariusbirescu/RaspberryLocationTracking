@@ -1,4 +1,4 @@
-import json, wifitest
+import json, wifitest, publisher
 
 def getCoords():
 	data = wifitest.getIPInfo()
@@ -6,6 +6,11 @@ def getCoords():
 	loc = data['loc']
 	lat = loc.split(',')[0]
 	longit = loc.split(',')[1]
+
+        print lat
+        print longit
+
+        publisher.publishToFirebase(lat,longit)
 	
 	return {"latitude": lat, "longitute": longit}
 
