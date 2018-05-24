@@ -7,9 +7,7 @@ def getCoords(destinationLat,destinationLong):
 	lat = loc.split(',')[0]
 	longit = loc.split(',')[1]
 
-        print lat
-        print longit
+        #print lat
+        #print longit
 
-        publisher.publishToFirebase(destinationLat,destinationLong,lat,longit)
-	
-	return {"latitude": lat, "longitute": longit}
+	return {"latitude": lat, "longitude": longit}
