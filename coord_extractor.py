@@ -1,6 +1,6 @@
 import json, wifitest, publisher
 
-def getCoords():
+def getCoords(destinationLat,destinationLong):
 	data = wifitest.getIPInfo()
 	
 	loc = data['loc']
@@ -10,8 +10,6 @@ def getCoords():
         print lat
         print longit
 
-        publisher.publishToFirebase(lat,longit)
+        publisher.publishToFirebase(destinationLat,destinationLong,lat,longit)
 	
 	return {"latitude": lat, "longitute": longit}
-
-getCoords()
