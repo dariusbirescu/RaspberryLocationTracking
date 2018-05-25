@@ -16,13 +16,13 @@ while(True):
 
   response=publisher.publishToFirebase(lat,longit,x['latitude'],x['longitude'],distance)
 
-  #print response
 
-  currentLocationId=json.loads(response)['name']
+  #currentLocationId=json.loads(response)['name']
 
-  newDistance=json.loads(publisher.getFromFirebase(lat,longit,currentLocationId))['distance']
+  newDistance=publisher.getFromFirebase()
 
-  if(distance>newDistance-10):
+  print newDistance
+  if(distance>float(newDistance)-10):
     print newDistance
 
   
