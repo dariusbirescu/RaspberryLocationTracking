@@ -1,0 +1,9 @@
+---
+applications:
+- name: cloud-angular
+  buildpack: staticfile_buildpack
+  disk_quota: 512M
+  timeout: 180
+  memory: 512M
+  instances: 1
+  path: dist
