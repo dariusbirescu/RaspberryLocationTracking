@@ -1,13 +1,9 @@
 import json, wifitest, publisher
 
+index=-1
 def getCoords(destinationLat,destinationLong):
-	data = wifitest.getIPInfo()
-	
-	loc = data['loc']
-	lat = loc.split(',')[0]
-	longit = loc.split(',')[1]
+        global index
+        coordinates=[{"latitude":120, "longitude":120},{"latitude":125,"longitude":130},{"latitude":120, "longitude":120},{"latitude":110, "longitude":110},{"latitude":110, "longitude":110}]
+        index=index+1
 
-        #print lat
-        #print longit
-
-	return {"latitude": lat, "longitude": longit}
+        return coordinates[index]

@@ -1,4 +1,4 @@
-import coord_extractor,publisher,json,time,RPi.GPIO as GPIO
+import math,coord_extractor,publisher,json,time,RPi.GPIO as GPIO
 
 lat = input("Latitude: ")
 longit=input("Longitude: ")
@@ -108,27 +108,44 @@ try:
  
 
   while(True):
-    time.sleep(5)
+  	 time.sleep(5)
 
     x=coord_extractor.getCoords(lat,longit)
 
     distance=abs(float(lat)-float(x['latitude']))+abs(float(longit)-float(x['longitude']))
 
-    response=publisher.publishToFirebase(lat,longit,x['latitude'],x['longitude'],distance)
+    R = 6371e3
+    fi1 = math.radians(x['latitude'])
+    fi2 = math.radians(lat)
+    deltafi = math.radians(lat-x['latitude'])
+    deltalambda = math.radians(longit-x['longitude'])
+    a = math.sin(deltafi/2) * math.sin(deltafi/2) + math.cos(fi1) * math.cos(fi2) * math.sin(deltalambda/2) * math.sin(deltalambda/2)
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    distance = R * c / 1000
 
 
-    #currentLocationId=json.loads(response)['name']
+    oldDistance=publisher.getFromFirebase()
 
-    newDistance=publisher.getFromFirebase()
+    print oldDistance
+    print distance
+    if float(distance)<0.3:
+        lcd_string("Destination reached",LCD_LINE_1,2)
+        break
+    elif abs(float(distance)-float(oldDistance))<=0.3 :
+                lcd_string("You are not moving",LCD_LINE_1,2)
+                lcd_string("Distance: "+str(distance),LCD_LINE_2,2)
+    elif float(distance)>float(oldDistance):
+                lcd_string("Distance larger", LCD_LINE_1,2)
+                lcd_string(str(distance),LCD_LINE_2,2)
+    else:
+                lcd_string("Distance remaining:",LCD_LINE_1,2)
+                lcd_string(str(distance),LCD_LINE_2,2)
 
-    print newDistance
-    if(distance>float(newDistance)-10):
-      lcd_string("You are not moving",LCD_LINE_1,2)
-      lcd_string("Distance: "+newDistance,LCD_LINE_2,2)
 
 except KeyboardInterrupt:
   pass
 finally:
   lcd_byte(0x01, LCD_CMD)
-  lcd_string("www.RoboFun.ro",LCD_LINE_2,2)
+  lcd_string("Destination",LCD_LINE_1,2)
+  lcd_string("Reached",LCD_LINE_2,2)
   GPIO.cleanup()
